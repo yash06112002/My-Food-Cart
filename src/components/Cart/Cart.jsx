@@ -32,7 +32,6 @@ const Cart = (props) => {
         </ul>
     )
 
-
     return (
         <Modal hideCartHandler={props.hideCartHandler}>
             {cartItems}

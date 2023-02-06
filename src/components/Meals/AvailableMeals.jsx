@@ -41,8 +41,8 @@ const AvailableMeals = () => {
     if (isLoading) return <section className={classes.spinner}></section>;
     if (httpError) return <section className={classes.error}><h1>{httpError}</h1></section>
 
-    const mealsList = meals.map(meal => <MealItem
-        id={meal.id}
+    const mealsList = meals.map((meal, index) => <MealItem
+        id={'m' + index}
         key={meal.id}
         name={meal.name}
         description={meal.description}
