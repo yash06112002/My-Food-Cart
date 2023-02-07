@@ -1,10 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Modal from '../UI/Modal';
 import classes from "./Cart.module.css";
 import CartContext from '../../store/CartContext';
 import CartItem from "./CartItem"
+import Checkout from './Checkout';
 
 const Cart = (props) => {
+
+    const [checkout, setCheckout] = useState(false);
 
     const CartCtx = useContext(CartContext);
     const totalAmount = `$ ${CartCtx.totalAmount.toFixed(2)}`
@@ -16,6 +19,8 @@ const Cart = (props) => {
     const removeFromCartHandler = id => {
         CartCtx.removeItem(id)
     }
+    const checkoutHandler = () => setCheckout(true);
+    const cancelCheckoutHandler = () => setCheckout(false);
 
     const cartItems = (
         <ul className={classes['cart-items']}>
@@ -34,15 +39,21 @@ const Cart = (props) => {
 
     return (
         <Modal hideCartHandler={props.hideCartHandler}>
-            {cartItems}
-            <div className={classes.total}>
-                <span>Amount</span>
-                <span>{totalAmount}</span>
+            {!checkout && <div>
+                {cartItems}
+                <div className={classes.total}>
+                    <span>Amount</span>
+                    <span>{totalAmount}</span>
+                </div>
+                <div className={classes.actions}>
+                    <button className={classes['button--alt']} onClick={props.hideCartHandler}>Close</button>
+                    {hasItems && <button className={classes.button} onClick={checkoutHandler}>Order</button>}
+                </div>
             </div>
-            <div className={classes.actions}>
-                <button className={classes['button--alt']} onClick={props.hideCartHandler}>Close</button>
-                {hasItems && <button className={classes.button}>Order</button>}
-            </div>
+            }
+            {checkout && <div >
+                <Checkout cancelCheckoutHandler={cancelCheckoutHandler} />
+            </div>}
         </Modal>
     )
 }
